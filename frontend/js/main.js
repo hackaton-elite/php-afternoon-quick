@@ -62,17 +62,25 @@ $('#maze-generator').click(function (event) {
     var mazeHeader = $('#maze-header');
     var mazeBody = $('#maze-body');
 
+    var mazeWidth = $('#maze-width').val();
+    var mazeHeight = $('#maze-height').val();
+    var mazeBrickDensity = $('#maze-brick-density').val();
+    var mazeStartX = $('#maze-start-x').val();
+    var mazeStartY = $('#maze-start-y').val();
+    var mazeEndX = $('#maze-end-x').val();
+    var mazeEndY = $('#maze-end-y').val();
+
     $.ajax({
         url: "/api/maze/generate",
         method: "POST",
         data: JSON.stringify({
-            "startPointX": 0,
-            "startPointY": 0,
-            "endPointX": 8,
-            "endPointY": 8,
-            "brick_density": 50,
-            "width": 10,
-            "height": 10
+            "startPointX": mazeStartX,
+            "startPointY": mazeStartY,
+            "endPointX": mazeEndX,
+            "endPointY": mazeEndY,
+            "brick_density": mazeBrickDensity,
+            "width": mazeWidth,
+            "height": mazeHeight
         }),
         dataType: "json"
     }).done(function (maze) {

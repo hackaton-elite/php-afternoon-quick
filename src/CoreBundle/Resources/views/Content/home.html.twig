@@ -8,9 +8,60 @@
     </div>
 
     <div class="row">
-        <div class="col-xs-12">
-            <button id="maze-generator" class="btn btn-primary">Click me to generate a new maze</button>
-        </div>
+        <form class="form" role="form">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="maze-width">Maze Width:</label>
+                    <input type="text" class="form-control" id="maze-width" value="10">
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="maze-height">Maze Height:</label>
+                    <input type="text" class="form-control" id="maze-height" value="10">
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="maze-block-density">Block Density %:</label>
+                    <input type="text" class="form-control" id="maze-block-density" value="30">
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="maze-start-x">Start Point X:</label>
+                    <input type="text" class="form-control" id="maze-start-x" value="0">
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="maze-start-y">Start Point Y</label>
+                    <input type="text" class="form-control" id="maze-start-y" value="0">
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="maze-end-x">End Point X:</label>
+                    <input type="text" class="form-control" id="maze-end-x" value="8">
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="maze-end-y">End Point Y</label>
+                    <input type="text" class="form-control" id="maze-end-y" value="8">
+                </div>
+            </div>
+
+            <div class="col-xs-12">
+                <input type="submit" id="maze-generator" class="btn btn-primary" value="Click me to generate a new maze">
+            </div>
+        </form>
     </div>
 
     <div class="row">
