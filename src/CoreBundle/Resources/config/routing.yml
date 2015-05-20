@@ -1,0 +1,3 @@
+core_homepage:
+    resource: @CoreBundle/Controller/ContentController.php
+    type: annotation
