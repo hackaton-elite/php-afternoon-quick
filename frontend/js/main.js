@@ -7,6 +7,8 @@ require('../../bower_components/bootstrap-sass/assets/javascripts/bootstrap.min'
 var renderMazeHeader = function (maze) {
     var mazeHeaderOutput = '<tr>';
 
+    mazeHeaderOutput += '<td>&nbsp;</td>';
+
     for (var index = 0; index < maze.width; index++) {
         mazeHeaderOutput += '<th>' + index + '</th>';
     }
@@ -27,13 +29,14 @@ var getMazeAsArray = function (maze) {
         mazeAsArray[mazePoint.xCoordinate][mazePoint.yCoordinate] = mazePoint;
     });
 
+    mazeAsArray[maze.start_location.xCoordinate][maze.start_location.yCoordinate] = maze.start_location;
+    mazeAsArray[maze.end_location.xCoordinate][maze.end_location.yCoordinate] = maze.end_location;
+
     return mazeAsArray;
 };
 
 var renderMazeCell = function (mazePoint) {
-    console.log('render maze', mazePoint);
-
-    if (mazePoint.obstacle) {
+    if ('undefined' !== typeof mazePoint.obstacle && mazePoint.obstacle) {
         return 'X';
     }
 
@@ -46,8 +49,10 @@ var renderMazeBody = function (mazeArray, maze) {
     for (var heightIterator = 0; heightIterator < maze.height; heightIterator++) {
         mazeBody += '<tr>';
 
+        mazeBody += '<th>' + heightIterator + '</th>';
+
         for (var widthIterator = 0; widthIterator < maze.width; widthIterator++) {
-            mazeBody += '<th>' + renderMazeCell(mazeArray[heightIterator][widthIterator]) + '</th>';
+            mazeBody += '<td>' + renderMazeCell(mazeArray[heightIterator][widthIterator]) + '</td>';
         }
 
         mazeBody += '</tr>';

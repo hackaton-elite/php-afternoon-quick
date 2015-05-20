@@ -28,7 +28,7 @@ class MazeService extends AbstractEntityManagerService
                     && !($endPoint->getXCoordinate() === $heightIterator && $endPoint->getYCoordinate() === $widthIterator)
                 ) {
                     $randomNumber        = rand(0, 100);
-                    $mazePointIsObstacle = $randomNumber > $maze->getBrickDensity();
+                    $mazePointIsObstacle = $randomNumber <= $maze->getBrickDensity();
                 }
 
 
