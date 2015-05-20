@@ -65,10 +65,89 @@ class LeeService
 
         $this->visitNode($startPoint->getXCoordinate(), $startPoint->getYCoordinate());
 
+        if (PHP_INT_MAX !== $this->bestSolutionLength) {
+            $endPoint = new Point($this->endPoint->getXCoordinate(), $this->endPoint->getYCoordinate());
+            $this->bestSolutionRoute = $this->retrieveBestSolutionRoute($endPoint);
+        }
+
         return $this->bestSolutionRoute;
     }
 
-    public function visitNode($xCoordinate, $yCoordinate, $bestSolutionSoFar = [])
+    protected function retrieveBestSolutionRoute(Point $point, array $bestRoute = [])
+    {
+        $bestRoute[] = $point;
+
+        if (1 === $this->getPointValue($point)) {
+            return $bestRoute;
+        }
+
+        /* Check neighbours */
+        $lowestNeighbour = $this->findLowestNeighbour($point);
+
+        /* Recursive call bellow */
+
+        return $this->retrieveBestSolutionRoute($lowestNeighbour, $bestRoute);
+    }
+
+    protected function findLowestNeighbour(Point $point)
+    {
+        $xCoordinate = $point->getXCoordinate();
+        $yCoordinate = $point->getYCoordinate();
+
+        $topNeighbourPosition    = new Point($xCoordinate - 1, $yCoordinate);
+        $bottomNeighbourPosition = new Point($xCoordinate + 1, $yCoordinate);
+        $leftNeighbourPosition   = new Point($xCoordinate, $yCoordinate - 1);
+        $rightNeighbourPosition  = new Point($xCoordinate, $yCoordinate + 1);
+
+        $topNeighbourScore    = $this->getPointValue($topNeighbourPosition);
+        $bottomNeighbourScore = $this->getPointValue($bottomNeighbourPosition);
+        $leftNeighbourScore   = $this->getPointValue($leftNeighbourPosition);
+        $rightNeighbourScore  = $this->getPointValue($rightNeighbourPosition);
+
+        $neigbours = [
+            [
+                'position' => $topNeighbourPosition,
+                'score'    => $topNeighbourScore
+            ],
+            [
+                'position' => $bottomNeighbourPosition,
+                'score'    => $bottomNeighbourScore
+            ],
+            [
+                'position' => $leftNeighbourPosition,
+                'score'    => $leftNeighbourScore
+            ],
+            [
+                'position' => $rightNeighbourPosition,
+                'score'    => $rightNeighbourScore,
+            ],
+        ];
+
+        $lowestScore    = $topNeighbourScore;
+        $lowestPosition = $topNeighbourPosition;
+
+        foreach ($neigbours as $neighbour) {
+            if ($neighbour['score'] < $lowestScore) {
+                $lowestScore    = $neighbour['score'];
+                $lowestPosition = $neighbour['position'];
+            }
+        }
+
+        return $lowestPosition;
+    }
+
+    protected function getPointValue(Point $point)
+    {
+        if (!$this->nodeIsOutOfBounds($point->getXCoordinate(), $point->getYCoordinate())
+            && $this->nodeHasBeenPreviouslyVisited($point->getXCoordinate(), $point->getYCoordinate())
+        ) {
+            return $this->solvedMap[$point->getXCoordinate()][$point->getYCoordinate()];
+        }
+
+        return PHP_INT_MAX;
+    }
+
+    public function visitNode($xCoordinate, $yCoordinate)
     {
         /* Don't bother visiting if node is out of bounds, an obstacle, or previously visited.*/
         if ($this->nodeIsOutOfBounds($xCoordinate, $yCoordinate)
@@ -89,23 +168,42 @@ class LeeService
             return;
         }
 
-        $newValue            = $currentValue + 1;
-        $bestSolutionSoFar[] = new Point($xCoordinate, $yCoordinate);
+        $newValue = $currentValue + 1;
 
         /* Get the optimal path to all the neighbours. */
-        $this->visitNeighbour($xCoordinate + 1, $yCoordinate, $newValue, $bestSolutionSoFar);
-        $this->visitNeighbour($xCoordinate - 1, $yCoordinate, $newValue, $bestSolutionSoFar);
-        $this->visitNeighbour($xCoordinate, $yCoordinate + 1, $newValue, $bestSolutionSoFar);
-        $this->visitNeighbour($xCoordinate, $yCoordinate - 1, $newValue, $bestSolutionSoFar);
+        $this->visitNeighbour($xCoordinate + 1, $yCoordinate, $newValue);
+        $this->visitNeighbour($xCoordinate - 1, $yCoordinate, $newValue);
+        $this->visitNeighbour($xCoordinate, $yCoordinate + 1, $newValue);
+        $this->visitNeighbour($xCoordinate, $yCoordinate - 1, $newValue);
+
 
         /* Visit the neighbours and carry on generating best path. */
-        $this->visitNode($xCoordinate + 1, $yCoordinate, $bestSolutionSoFar);
-        $this->visitNode($xCoordinate - 1, $yCoordinate, $bestSolutionSoFar);
-        $this->visitNode($xCoordinate, $yCoordinate + 1, $bestSolutionSoFar);
-        $this->visitNode($xCoordinate, $yCoordinate - 1, $bestSolutionSoFar);
+        $this->visitNode($xCoordinate + 1, $yCoordinate);
+        $this->visitNode($xCoordinate - 1, $yCoordinate);
+        $this->visitNode($xCoordinate, $yCoordinate + 1);
+        $this->visitNode($xCoordinate, $yCoordinate - 1);
     }
 
-    public function visitNeighbour($xCoordinate, $yCoordinate, $newValue, $bestSolutionSoFar)
+    /**
+     * Display a map - used mainly during debugging for some visual aid.
+     *
+     * @param array $map
+     *
+     * @return string
+     */
+    public function displayMap($map)
+    {
+        echo PHP_EOL;
+        foreach ($map as $mapLine) {
+            foreach ($mapLine as $mapColumn) {
+                echo $mapColumn . "\t";
+            }
+            echo PHP_EOL;
+        }
+        echo PHP_EOL;
+    }
+
+    public function visitNeighbour($xCoordinate, $yCoordinate, $newValue)
     {
         if ($this->nodeIsOutOfBounds($xCoordinate, $yCoordinate)) {
             return;
@@ -118,8 +216,6 @@ class LeeService
 
             if ($xCoordinate === $this->endPoint->getXCoordinate() && $yCoordinate === $this->endPoint->getYCoordinate() && $this->bestSolutionLength > $newValue) {
                 $this->bestSolutionLength = $newValue;
-                $bestSolutionSoFar[]      = new Point($xCoordinate, $yCoordinate);
-                $this->bestSolutionRoute  = $bestSolutionSoFar;
             }
         }
     }

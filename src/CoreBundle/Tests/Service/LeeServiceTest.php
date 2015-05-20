@@ -94,11 +94,24 @@ class LeeServiceTest extends AbstractIntegrationTest
         $nextToEachOtherEndPoint   = new EndLocation(5, 1);
         $nextToEachOtherLength     = 2;
 
+        $highStepCountBugMap = [
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0],
+            [1, 0, 1, 0, 0],
+            [0, 1, 0, 1, 0],
+        ];
+
+        $highStepCountBugStartPoint = new StartLocation(0, 0);
+        $highStepCountBugEndPoint = new EndLocation(4, 4);
+        $highStepCountBugExpectedLength = 9;
+
         return [
             [$firstMap, $firstStartPoint, $firstEndPoint, $firstExpectedLength],
             [$secondMap, $secondStartPoint, $secondEndPoint, $secondExpectedLength],
             [$impossibleMap, $impossibleMapStartPoint, $impossibleMapEndPoint, $impossibleMapLength],
             [$nextToEachOtherMap, $nextToEachOtherStartPoint, $nextToEachOtherEndPoint, $nextToEachOtherLength],
+            [$highStepCountBugMap, $highStepCountBugStartPoint, $highStepCountBugEndPoint, $highStepCountBugExpectedLength],
         ];
     }
 }
