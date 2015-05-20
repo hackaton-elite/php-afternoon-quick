@@ -2,7 +2,11 @@
 
 namespace ApiBundle\Controller;
 
+use ApiBundle\Entity\EndLocation;
+use ApiBundle\Entity\Location;
 use ApiBundle\Entity\Maze;
+use ApiBundle\Entity\StartLocation;
+use ApiBundle\Exception\ApiException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -24,11 +28,60 @@ class MazeController extends Controller
 
         $maze = new Maze();
         $maze = $this->processNewMazeMetadata($maze, $requestContent);
+
+        $maze = $this->get('api.maze.service')->generateNewMaze($maze);
+        $this->processLocationMetadata($maze, $requestContent);
+
+        $mazeAsArray = $this->get('api.maze.service')->getMazeAsArray($maze);
+
+//        $this->get('core.lee.service')->findRoute();
+    }
+
+    protected function processLocationMetadata(Maze $maze, array $requestParameters)
+    {
+        $startPoint = new StartLocation();
+        $startPoint->setMaze($maze);
+
+        $endPoint = new EndLocation();
+        $endPoint->setMaze($maze);
+
+        if (array_key_exists('startPointX', $requestParameters)) {
+            $startPoint->setXCoordinate($requestParameters['startPointX']);
+        } else {
+            throw new ApiException("Start point X undefined.");
+        }
+
+        if (array_key_exists('startPointY', $requestParameters)) {
+            $startPoint->setYCoordinate($requestParameters['startPointY']);
+        } else {
+            throw new ApiException("Start point Y undefined.");
+        }
+
+        if (array_key_exists('endPointX', $requestParameters)) {
+            $endPoint->setXCoordinate($requestParameters['endPointX']);
+        } else {
+            throw new ApiException("End point X undefined.");
+        }
+
+        if (array_key_exists('endPointY', $requestParameters)) {
+            $endPoint->setYCoordinate($requestParameters['endPointY']);
+        } else {
+            throw new ApiException("End point Y undefined.");
+        }
+
+        $manager = $this->get('doctrine')->getManager();
+
+        $manager->persist($startPoint);
+        $manager->persist($endPoint);
+
+        $manager->flush();
     }
 
     /**
      * @param Maze  $maze
      * @param array $requestParameters
+     *
+     * @return Maze
      */
     protected function processNewMazeMetadata(Maze $maze, array $requestParameters)
     {
@@ -49,5 +102,7 @@ class MazeController extends Controller
         } else {
             $maze->setBrickDensity(50);
         }
+
+        return $maze;
     }
 }

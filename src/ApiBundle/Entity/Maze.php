@@ -39,6 +39,20 @@ class Maze extends AbstractTemporalEntity
     protected $brickDensity;
 
     /**
+     * @var StartLocation
+     *
+     * @ORM\OneToOne(targetEntity="ApiBundle\Entity\StartLocation", mappedBy="maze")
+     */
+    protected $startLocation;
+
+    /**
+     * @var EndLocation
+     *
+     * @ORM\OneToOne(targetEntity="ApiBundle\Entity\EndLocation", mappedBy="maze")
+     */
+    protected $endLocation;
+
+    /**
      * @return int
      */
     public function getWidth()
@@ -98,5 +112,43 @@ class Maze extends AbstractTemporalEntity
         return $this;
     }
 
+    /**
+     * @return StartLocation
+     */
+    public function getStartLocation()
+    {
+        return $this->startLocation;
+    }
 
+    /**
+     * @param StartLocation $startLocation
+     *
+     * @return $this
+     */
+    public function setStartLocation($startLocation)
+    {
+        $this->startLocation = $startLocation;
+
+        return $this;
+    }
+
+    /**
+     * @return EndLocation
+     */
+    public function getEndLocation()
+    {
+        return $this->endLocation;
+    }
+
+    /**
+     * @param EndLocation $endLocation
+     *
+     * @return $this
+     */
+    public function setEndLocation($endLocation)
+    {
+        $this->endLocation = $endLocation;
+
+        return $this;
+    }
 }

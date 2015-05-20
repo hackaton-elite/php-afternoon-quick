@@ -11,27 +11,17 @@ use Doctrine\ORM\Mapping as ORM;
  * @package ApiBundle\Entity
  * @author  Petre Pătrașc <petre@dreamlabs.ro>
  *
- * @ORM\Entity()
- * @ORM\Table(name="location")
+ * @ORM\MappedSuperclass
+ * @ORM\HasLifecycleCallbacks
  */
 class Location extends AbstractTemporalEntity
 {
-    const START_POINT = 0;
-    const END_POINT = 1;
-
     /**
      * @var Maze
      *
-     * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\Maze")
+     * @ORM\OneToOne(targetEntity="ApiBundle\Entity\Maze")
      */
     protected $maze;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="type", type="boolean")
-     */
-    protected $type;
 
     /**
      * @var int
@@ -46,6 +36,26 @@ class Location extends AbstractTemporalEntity
      * @ORM\Column(name="y", type="integer")
      */
     protected $yCoordinate;
+
+    /**
+     * @return Maze
+     */
+    public function getMaze()
+    {
+        return $this->maze;
+    }
+
+    /**
+     * @param Maze $maze
+     *
+     * @return $this
+     */
+    public function setMaze($maze)
+    {
+        $this->maze = $maze;
+
+        return $this;
+    }
 
     /**
      * @return int
@@ -87,43 +97,5 @@ class Location extends AbstractTemporalEntity
         return $this;
     }
 
-    /**
-     * @return Maze
-     */
-    public function getMaze()
-    {
-        return $this->maze;
-    }
 
-    /**
-     * @param Maze $maze
-     *
-     * @return $this
-     */
-    public function setMaze($maze)
-    {
-        $this->maze = $maze;
-
-        return $this;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param boolean $type
-     *
-     * @return $this
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
 }
