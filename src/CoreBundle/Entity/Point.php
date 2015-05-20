@@ -3,7 +3,16 @@
 
 namespace CoreBundle\Entity;
 
+use JMS\Serializer\Annotation as JMS;
 
+/**
+ * Class Point
+ *
+ * @package CoreBundle\Entity
+ * @author  Petre Pătrașc <petre@dreamlabs.ro>
+ *
+ * @JMS\ExclusionPolicy("all")
+ */
 class Point
 {
     public function __construct($xCoordinate, $yCoordinate)
@@ -19,11 +28,19 @@ class Point
 
     /**
      * @var int
+     *
+     * @JMS\Type("integer")
+     * @JMS\SerializedName("xCoordinate")
+     * @JMS\Expose()
      */
     protected $xCoordinate;
 
     /**
      * @var int
+     *
+     * @JMS\Type("integer")
+     * @JMS\SerializedName("yCoordinate")
+     * @JMS\Expose()
      */
     protected $yCoordinate;
 

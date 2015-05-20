@@ -29,6 +29,13 @@ var getMazeAsArray = function (maze) {
         mazeAsArray[mazePoint.xCoordinate][mazePoint.yCoordinate] = mazePoint;
     });
 
+    maze.solution.map(function (solutionStep) {
+        solutionStep.is_solution = true;
+        mazeAsArray[solutionStep.xCoordinate][solutionStep.yCoordinate] = solutionStep;
+    });
+
+    maze.start_location.is_starting = true;
+    maze.end_location.is_starting = true;
     mazeAsArray[maze.start_location.xCoordinate][maze.start_location.yCoordinate] = maze.start_location;
     mazeAsArray[maze.end_location.xCoordinate][maze.end_location.yCoordinate] = maze.end_location;
 
@@ -36,6 +43,15 @@ var getMazeAsArray = function (maze) {
 };
 
 var renderMazeCell = function (mazePoint) {
+    if ('undefined' !== typeof mazePoint.is_starting && mazePoint.is_starting) {
+        return 'O';
+    }
+
+    if ('undefined' !== typeof mazePoint.is_solution && mazePoint.is_solution) {
+        return '+';
+    }
+
+
     if ('undefined' !== typeof mazePoint.obstacle && mazePoint.obstacle) {
         return 'X';
     }
@@ -95,5 +111,7 @@ $('#maze-generator').click(function (event) {
         var mazeAsArray = getMazeAsArray(maze);
         var mazeBodyOutput = renderMazeBody(mazeAsArray, maze);
         mazeBody.html(mazeBodyOutput);
+
+        console.log('maze solution', maze.solution);
     });
 });

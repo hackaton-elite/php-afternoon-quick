@@ -89,6 +89,14 @@ class Maze extends AbstractTemporalEntity
     protected $endLocation;
 
     /**
+     * @var array
+     *
+     * @JMS\Type("array<CoreBundle\Entity\Point>")
+     * @JMS\Expose()
+     */
+    protected $solution;
+
+    /**
      * @return int
      */
     public function getWidth()
@@ -211,6 +219,26 @@ class Maze extends AbstractTemporalEntity
     public function setMazePoints($mazePoints)
     {
         $this->mazePoints = $mazePoints;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSolution()
+    {
+        return $this->solution;
+    }
+
+    /**
+     * @param array $solution
+     *
+     * @return $this
+     */
+    public function setSolution($solution)
+    {
+        $this->solution = $solution;
 
         return $this;
     }

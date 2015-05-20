@@ -68,7 +68,7 @@ class MazeService extends AbstractEntityManagerService
             $pointXCoordinate = $mazePoint->getXCoordinate();
             $pointYCoordinate = $mazePoint->getYCoordinate();
 
-            $mapAsArray[$pointXCoordinate][$pointYCoordinate] = $mazePoint->isObstacle();
+            $mapAsArray[$pointXCoordinate][$pointYCoordinate] = intval($mazePoint->isObstacle());
         }
 
         return $mapAsArray;
