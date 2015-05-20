@@ -40,7 +40,8 @@ class MazeService extends AbstractEntityManagerService
                     ->setXCoordinate($heightIterator)
                     ->setYCoordinate($widthIterator);
 
-                $this->getManager()->persist($maze);
+                $this->getManager()->persist($mazePoint);
+                $maze->addMazePoint($mazePoint);
             }
         }
 
@@ -56,6 +57,6 @@ class MazeService extends AbstractEntityManagerService
      */
     public function getMazeAsArray(Maze $maze)
     {
-        return [];
+
     }
 }

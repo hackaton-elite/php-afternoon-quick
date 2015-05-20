@@ -164,4 +164,11 @@ class Maze extends AbstractTemporalEntity
 
         return $this;
     }
+
+    public function addMazePoint(MazePoint $mazePoint)
+    {
+        $this->mazePoints->add($mazePoint);
+
+        return $this;
+    }
 }
