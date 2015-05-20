@@ -1,0 +1,8 @@
+services:
+    api.abstract_manager.service:
+        class: ApiBundle\Service\AbstractEntityManagerService
+        arguments: [@doctrine.orm.entity_manager]
+
+    api.maze.service:
+        class: ApiBundle\Service\MazeService
+        parent: api.abstract_manager.service

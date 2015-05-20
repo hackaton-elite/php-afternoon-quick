@@ -1,0 +1,3 @@
+api_maze:
+    resource: @ApiBundle/Controller/MazeController.php
+    type: annotation
