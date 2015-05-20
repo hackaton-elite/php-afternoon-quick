@@ -22,9 +22,23 @@ class LeeServiceTest extends AbstractIntegrationTest
         $this->leeService = $this->getContainer()->get('core.lee.service');
     }
 
-    public function testFindRoute()
+    /**
+     * @param $map
+     * @param $startPoint
+     * @param $endPoint
+     *
+     * @dataProvider findRouteDataProvider
+     */
+    public function testFindRoute($map, $startPoint, $endPoint)
     {
-        $map = [
+        $this->leeService->setObstacleMap($map);
+
+        $route = $this->leeService->findRoute($startPoint, $endPoint);
+    }
+
+    public function findRouteDataProvider()
+    {
+        $firstMap = [
             [0, 0, 1, 0, 0],
             [0, 0, 1, 0, 0],
             [0, 0, 1, 0, 0],
@@ -32,11 +46,26 @@ class LeeServiceTest extends AbstractIntegrationTest
             [1, 0, 0, 0, 0],
         ];
 
-        $startPoint = new Point(0, 0);
-        $endPoint   = new Point(5, 5);
+        $firstStartPoint = new Point(0, 0);
+        $firstEndPoint   = new Point(4, 4);
 
-        $this->leeService->setObstacleMap($map);
+        $secondMap = [
+            [0, 0, 0, 0, 0],
+            [1, 1, 1, 1, 0],
+            [0, 0, 0, 0, 0],
+            [0, 1, 1, 1, 1],
+            [0, 0, 0, 0, 0],
+            [1, 1, 1, 1, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+        ];
 
-        $route = $this->leeService->findRoute($startPoint, $endPoint);
+        $secondStartPoint = new Point(0, 0);
+        $secondEndPoint = new Point (7, 2);
+
+        return [
+            [$firstMap, $firstStartPoint, $firstEndPoint],
+            [$secondMap, $secondStartPoint, $secondEndPoint],
+        ];
     }
 }

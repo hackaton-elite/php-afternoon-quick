@@ -6,11 +6,15 @@ namespace CoreBundle\Entity;
 
 class Point
 {
-    public function __construct($xCoordinate, $yCoordinate, $brick = false)
+    public function __construct($xCoordinate, $yCoordinate)
     {
         $this->xCoordinate = $xCoordinate;
         $this->yCoordinate = $yCoordinate;
-        $this->brick       = $brick;
+    }
+
+    function __toString()
+    {
+        return "[{$this->getXCoordinate()}, {$this->getYCoordinate()}]";
     }
 
     /**
@@ -22,11 +26,6 @@ class Point
      * @var int
      */
     protected $yCoordinate;
-
-    /**
-     * @var bool
-     */
-    protected $brick;
 
     /**
      * @return int
@@ -68,23 +67,5 @@ class Point
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isBrick()
-    {
-        return $this->brick;
-    }
 
-    /**
-     * @param bool $brick
-     *
-     * @return $this
-     */
-    public function setBrick($brick)
-    {
-        $this->brick = $brick;
-
-        return $this;
-    }
 }
