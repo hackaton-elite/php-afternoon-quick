@@ -57,6 +57,54 @@ class MazeService extends AbstractEntityManagerService
      */
     public function getMazeAsArray(Maze $maze)
     {
+        $mapAsArray = [];
 
+        for ($heightIterator = 0; $heightIterator < $maze->getHeight(); $heightIterator++) {
+            $mapAsArray[$heightIterator] = [];
+        }
+
+        /** @var MazePoint $mazePoint */
+        foreach ($maze->getMazePoints() as $mazePoint) {
+            $pointXCoordinate = $mazePoint->getXCoordinate();
+            $pointYCoordinate = $mazePoint->getYCoordinate();
+
+            $mapAsArray[$pointXCoordinate][$pointYCoordinate] = $mazePoint->isObstacle();
+        }
+
+        return $mapAsArray;
     }
+
+    /**
+     * Display a map - used mainly during debugging for some visual aid.
+     *
+     * @param array $map
+     *
+     * @return string
+     */
+    public function displayMap($map)
+    {
+        $output = '';
+
+        $output .= PHP_EOL;
+        foreach ($map as $mapLine) {
+            foreach ($mapLine as $mapColumn) {
+                $output .= (false === $mapColumn) ? 'x' : ' ';
+            }
+            $output .= PHP_EOL;
+        }
+        $output .= PHP_EOL;
+
+        return $output;
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return Maze
+     */
+    public function findOneById($id)
+    {
+        return $this->getManager()->getRepository('ApiBundle:Maze')->find($id);
+    }
+
 }

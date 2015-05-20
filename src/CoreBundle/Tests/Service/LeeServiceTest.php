@@ -4,6 +4,8 @@
 namespace CoreBundle\Tests\Service;
 
 
+use ApiBundle\Entity\EndLocation;
+use ApiBundle\Entity\StartLocation;
 use CoreBundle\Entity\Point;
 use CoreBundle\Service\LeeService;
 use CoreBundle\Tests\AbstractIntegrationTest;
@@ -23,16 +25,16 @@ class LeeServiceTest extends AbstractIntegrationTest
     }
 
     /**
-     * @param $map
-     * @param $startPoint
-     * @param $endPoint
+     * @param array $map
+     * @param StartLocation $startPoint
+     * @param EndLocation $endPoint
      *
      * @dataProvider findRouteDataProvider
      */
     public function testFindRoute($map, $startPoint, $endPoint, $expectedLength)
     {
         $this->leeService->setObstacleMap($map);
-        $route = $this->leeService->findRoute($startPoint, $endPoint);
+        $route = $this->leeService->findRoute($map, $startPoint, $endPoint);
 
         $this->assertNotNull($route);
         $this->assertInternalType('array', $route);
@@ -49,8 +51,8 @@ class LeeServiceTest extends AbstractIntegrationTest
             [1, 0, 0, 0, 0],
         ];
 
-        $firstStartPoint     = new Point(0, 0);
-        $firstEndPoint       = new Point(4, 4);
+        $firstStartPoint     = new StartLocation(0, 0);
+        $firstEndPoint       = new EndLocation(4, 4);
         $firstExpectedLength = 9;
 
         $secondMap = [
@@ -64,8 +66,8 @@ class LeeServiceTest extends AbstractIntegrationTest
             [0, 0, 0, 0, 0],
         ];
 
-        $secondStartPoint     = new Point(0, 0);
-        $secondEndPoint       = new Point (7, 2);
+        $secondStartPoint     = new StartLocation(0, 0);
+        $secondEndPoint       = new EndLocation(7, 2);
         $secondExpectedLength = 22;
 
         $impossibleMap = [
@@ -75,8 +77,8 @@ class LeeServiceTest extends AbstractIntegrationTest
             [0, 0, 1, 0],
         ];
 
-        $impossibleMapStartPoint = new Point(0, 0);
-        $impossibleMapEndPoint   = new Point(3, 3);
+        $impossibleMapStartPoint = new StartLocation(0, 0);
+        $impossibleMapEndPoint   = new EndLocation(3, 3);
         $impossibleMapLength     = 0;
 
         $nextToEachOtherMap = [
@@ -88,8 +90,8 @@ class LeeServiceTest extends AbstractIntegrationTest
             [0, 0, 0],
         ];
 
-        $nextToEachOtherStartPoint = new Point(5, 0);
-        $nextToEachOtherEndPoint   = new Point(5, 1);
+        $nextToEachOtherStartPoint = new StartLocation(5, 0);
+        $nextToEachOtherEndPoint   = new EndLocation(5, 1);
         $nextToEachOtherLength     = 2;
 
         return [

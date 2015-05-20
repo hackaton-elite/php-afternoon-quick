@@ -10,7 +10,9 @@ use ApiBundle\Exception\ApiException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class MazeController extends Controller
 {
@@ -21,23 +23,45 @@ class MazeController extends Controller
      *
      * @Route("/maze/generate", name="api.maze.generate")
      * @Method({"POST"})
+     *
+     * @return Response
      */
     public function generateNewMaze(Request $request)
     {
         $requestContent = json_decode($request->getContent(), true);
 
-        $maze = new Maze();
-        $maze = $this->processNewMazeMetadata($maze, $requestContent);
-
+        $maze = $this->processNewMazeMetadata($requestContent);
         $maze = $this->processLocationMetadata($maze, $requestContent);
 
-        $maze = $this->get('api.maze.service')->generateNewMaze($maze);
+        $this->get('api.maze.service')->generateNewMaze($maze);
+
+        $maze = $this->get('jms_serializer')->serialize($maze, 'json');
+
+        return new Response($maze);
+    }
+
+    /**
+     * @param int $id
+     *
+     * @Route("/maze/display/{id}", name="api.maze.display")
+     * @Method({"GET"})
+     *
+     * @return Response
+     * @throws ApiException
+     */
+    public function displayMapAsAsciiAction($id)
+    {
+        $maze = $this->get('api.maze.service')->findOneById($id);
+
+        if (null === $maze) {
+            throw new ApiException('The provided maze ID does not exist');
+        }
 
         $mazeAsArray = $this->get('api.maze.service')->getMazeAsArray($maze);
+        $mazeOutput  = $this->get('api.maze.service')->displayMap($mazeAsArray);
+        $mazeOutput  = '<pre>' . $mazeOutput;
 
-//        $this->get('core.lee.service')->findRoute();
-
-        /* Display API response. */
+        return new Response($mazeOutput);
     }
 
     protected function processLocationMetadata(Maze $maze, array $requestParameters)
@@ -86,13 +110,15 @@ class MazeController extends Controller
     }
 
     /**
-     * @param Maze  $maze
      * @param array $requestParameters
      *
      * @return Maze
+     * @internal param Maze $maze
      */
-    protected function processNewMazeMetadata(Maze $maze, array $requestParameters)
+    protected function processNewMazeMetadata(array $requestParameters)
     {
+        $maze = new Maze();
+
         if (array_key_exists('width', $requestParameters)) {
             $maze->setWidth($requestParameters['width']);
         } else {

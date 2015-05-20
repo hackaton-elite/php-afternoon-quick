@@ -4,6 +4,8 @@
 namespace CoreBundle\Service;
 
 
+use ApiBundle\Entity\EndLocation;
+use ApiBundle\Entity\StartLocation;
 use CoreBundle\Entity\Point;
 
 /**
@@ -48,12 +50,13 @@ class LeeService
     protected $bestSolutionRoute = [];
 
     /**
-     * @var Point
+     * @var EndLocation
      */
     protected $endPoint;
 
-    public function findRoute(Point $startPoint, Point $endPoint)
+    public function findRoute($obstacleMap, StartLocation $startPoint, EndLocation $endPoint)
     {
+        $this->obstacleMap = $obstacleMap;
         $this->setEndPoint($endPoint);
 
         /* Create map copy */
@@ -196,25 +199,6 @@ class LeeService
     }
 
     /**
-     * Display a map - used mainly during debugging for some visual aid.
-     *
-     * @param array $map
-     *
-     * @deprecated
-     */
-    public function displayMap($map)
-    {
-        echo PHP_EOL;
-        foreach ($map as $mapLine) {
-            foreach ($mapLine as $mapColumn) {
-                echo $mapColumn . "\t";
-            }
-            echo PHP_EOL;
-        }
-        echo PHP_EOL;
-    }
-
-    /**
      * @return array
      */
     public function getObstacleMap()
@@ -335,7 +319,7 @@ class LeeService
     }
 
     /**
-     * @return Point
+     * @return EndLocation
      */
     public function getEndPoint()
     {
@@ -343,7 +327,7 @@ class LeeService
     }
 
     /**
-     * @param Point $endPoint
+     * @param EndLocation $endPoint
      *
      * @return $this
      */

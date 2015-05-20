@@ -5,6 +5,7 @@ namespace ApiBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * Definition of the Maze object.
@@ -14,7 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity()
  * @ORM\Table(name="maze")
- * @ORM\HasLifecycleCallbacks()
+ *
+ * @JMS\ExclusionPolicy("all")
  */
 class Maze extends AbstractTemporalEntity
 {
@@ -34,6 +36,10 @@ class Maze extends AbstractTemporalEntity
      * @var int
      *
      * @ORM\Column(name="width", type="integer")
+     *
+     * @JMS\Type("integer")
+     * @JMS\SerializedName("width")
+     * @JMS\Expose()
      */
     protected $width;
 
@@ -41,6 +47,10 @@ class Maze extends AbstractTemporalEntity
      * @var int
      *
      * @ORM\Column(name="height", type="integer")
+     *
+     * @JMS\Type("integer")
+     * @JMS\SerializedName("height")
+     * @JMS\Expose()
      */
     protected $height;
 
@@ -48,6 +58,10 @@ class Maze extends AbstractTemporalEntity
      * @var int
      *
      * @ORM\Column(name="brick_density", type="integer")
+     *
+     * @JMS\Type("integer")
+     * @JMS\SerializedName("brick_density")
+     * @JMS\Expose()
      */
     protected $brickDensity;
 
@@ -192,5 +206,5 @@ class Maze extends AbstractTemporalEntity
         return $this;
     }
 
-    
+
 }

@@ -16,6 +16,13 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Location extends AbstractTemporalEntity
 {
+    public function __construct($xCoordinate = 0, $yCoordinate = 0)
+    {
+        $this
+            ->setXCoordinate($xCoordinate)
+            ->setYCoordinate($yCoordinate);
+    }
+
     /**
      * @var Maze
      *
