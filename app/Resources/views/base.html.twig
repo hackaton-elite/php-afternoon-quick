@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="{{ asset('dist/css/main.css') }}"/>
     {% endblock %}
 
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+    {% include '::_favicon.html.twig' %}
 </head>
 <body>
 {% block body %}
