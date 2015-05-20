@@ -1,6 +1,14 @@
 .content-wrapper {
-  @extend .container;
+  @extend .container-fluid;
 
   background-color: #deecee;
   min-height: 500px;
+}
+
+#maze-placeholder {
+  margin-top: 2em;
+
+  td, th {
+    @extend .text-center;
+  }
 }
