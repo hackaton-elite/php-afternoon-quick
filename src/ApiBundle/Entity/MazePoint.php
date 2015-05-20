@@ -4,6 +4,7 @@
 namespace ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * Class MazePoint
@@ -13,6 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity()
  * @ORM\Table(name="maze_point")
+ *
+ * @JMS\ExclusionPolicy("all")
  */
 class MazePoint extends Location
 {
@@ -27,6 +30,10 @@ class MazePoint extends Location
      * @var bool
      *
      * @ORM\Column(name="obstacle", type="boolean")
+     *
+     * @JMS\Type("boolean")
+     * @JMS\SerializedName("obstacle")
+     * @JMS\Expose()
      */
     protected $obstacle;
 

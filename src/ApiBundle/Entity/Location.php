@@ -4,6 +4,7 @@
 namespace ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * Defines a location point. Used for start and end points.
@@ -13,6 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
+ *
+ * @JMS\ExclusionPolicy("all")
  */
 class Location extends AbstractTemporalEntity
 {
@@ -34,6 +37,10 @@ class Location extends AbstractTemporalEntity
      * @var int
      *
      * @ORM\Column(name="x", type="integer")
+     *
+     * @JMS\Type("integer")
+     * @JMS\SerializedName("xCoordinate")
+     * @JMS\Expose()
      */
     protected $xCoordinate;
 
@@ -41,6 +48,10 @@ class Location extends AbstractTemporalEntity
      * @var int
      *
      * @ORM\Column(name="y", type="integer")
+     *
+     * @JMS\Type("integer")
+     * @JMS\SerializedName("yCoordinate")
+     * @JMS\Expose()
      */
     protected $yCoordinate;
 

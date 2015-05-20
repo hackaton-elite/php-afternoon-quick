@@ -29,6 +29,9 @@ class Maze extends AbstractTemporalEntity
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="ApiBundle\Entity\MazePoint", mappedBy="maze")
+     *
+     * @JMS\Type("array<ApiBundle\Entity\MazePoint>")
+     * @JMS\Expose()
      */
     protected $mazePoints;
 
@@ -69,6 +72,9 @@ class Maze extends AbstractTemporalEntity
      * @var StartLocation
      *
      * @ORM\OneToOne(targetEntity="ApiBundle\Entity\StartLocation", mappedBy="maze")
+     *
+     * @JMS\Type("ApiBundle\Entity\StartLocation")
+     * @JMS\Expose()
      */
     protected $startLocation;
 
@@ -76,6 +82,9 @@ class Maze extends AbstractTemporalEntity
      * @var EndLocation
      *
      * @ORM\OneToOne(targetEntity="ApiBundle\Entity\EndLocation", mappedBy="maze")
+     *
+     * @JMS\Type("ApiBundle\Entity\EndLocation")
+     * @JMS\Expose()
      */
     protected $endLocation;
 
