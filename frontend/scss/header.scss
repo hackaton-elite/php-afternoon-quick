@@ -1,0 +1,7 @@
+.header {
+  @extend .container;
+  @extend .text-center;
+
+  background-color: #000;
+  color: #fff;
+}
