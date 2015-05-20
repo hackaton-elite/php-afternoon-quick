@@ -82,6 +82,7 @@ $('#maze-generator').click(function (event) {
 
     var mazeHeader = $('#maze-header');
     var mazeBody = $('#maze-body');
+    var mazeSolutionDescription = $('#maze-solution-description');
 
     var mazeWidth = $('#maze-width').val();
     var mazeHeight = $('#maze-height').val();
@@ -112,6 +113,10 @@ $('#maze-generator').click(function (event) {
         var mazeBodyOutput = renderMazeBody(mazeAsArray, maze);
         mazeBody.html(mazeBodyOutput);
 
-        console.log('maze solution', maze.solution);
+        if (maze.solution.length > 0) {
+            mazeSolutionDescription.html('Solution in ' + maze.solution.length + ' steps.');
+        } else {
+            mazeSolutionDescription.html('No solution possible.');
+        }
     });
 });
