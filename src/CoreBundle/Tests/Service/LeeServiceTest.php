@@ -89,8 +89,8 @@ class LeeServiceTest extends AbstractIntegrationTest
         ];
 
         $nextToEachOtherStartPoint = new Point(5, 0);
-        $nextToEachOtherEndPoint   = new Point(5, 2);
-        $nextToEachOtherLength     = 3;
+        $nextToEachOtherEndPoint   = new Point(5, 1);
+        $nextToEachOtherLength     = 2;
 
         return [
             [$firstMap, $firstStartPoint, $firstEndPoint, $firstExpectedLength],
