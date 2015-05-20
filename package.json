@@ -1,0 +1,32 @@
+{
+  "name": "php-afternoon-quick",
+  "version": "1.0.0",
+  "description": "PHP Afternoon Quick",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hackaton-elite/php-afternoon-quick"
+  },
+  "author": "Petre Pătrașc <petre@dreamlabs.ro>",
+  "license": "proprietary",
+  "bugs": {
+    "url": "https://github.com/hackaton-elite/php-afternoon-quick/issues"
+  },
+  "homepage": "https://github.com/hackaton-elite/php-afternoon-quick",
+  "dependencies": {
+    "es6-promise": "^2.1.1",
+    "flux": "^2.0.3",
+    "gulp": "^3.8.11",
+    "gulp-browserify": "^0.5.1",
+    "gulp-concat": "^2.5.2",
+    "gulp-sass": "^2.0.0",
+    "jest-cli": "^0.4.2",
+    "jquery": "^2.1.4",
+    "object-assign": "^2.0.0",
+    "react": "^0.13.3",
+    "reactify": "^1.1.0"
+  }
+}

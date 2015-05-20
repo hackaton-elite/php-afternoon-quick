@@ -1,0 +1,20 @@
+{
+  "name": "php-afternoon-quick",
+  "version": "1.0.0",
+  "homepage": "https://github.com/hackaton-elite/php-afternoon-quick",
+  "authors": [
+    "Petre Pătraşc <petre@dreamlabs.ro>"
+  ],
+  "description": "PHP Afternoon Quick",
+  "license": "proprietary",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap-sass": "~3.3.4"
+  }
+}
