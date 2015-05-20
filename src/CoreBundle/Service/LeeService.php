@@ -1,0 +1,142 @@
+<?php
+
+
+namespace CoreBundle\Service;
+
+
+use CoreBundle\Entity\Point;
+
+class LeeService
+{
+    /**
+     * @var array
+     */
+    protected $obstacleMap;
+
+    /**
+     * @var array
+     */
+    protected $solvedMap;
+
+    /**
+     * @var int
+     */
+    protected $mapWidth;
+
+    /**
+     * @var int
+     */
+    protected $mapHeight;
+
+    public function findRoute(Point $startPoint, Point $endPoint)
+    {
+        /* Create map copy */
+        $this->solvedMap = $this->createInitialSolvedMap($this->obstacleMap);
+        $this->solvedMap = $this->markStartNodeAsVisited($this->solvedMap, $startPoint);
+        $this->displayMap($this->obstacleMap);
+        $this->displayMap($this->solvedMap);
+
+        $this->visitNode($startPoint->getXCoordinate(), $startPoint->getYCoordinate());
+
+//        var_dump($this->mapWidth);
+//        var_dump($this->mapHeight);
+//        die;
+
+        $this->displayMap($this->solvedMap);
+    }
+
+    public function visitNode($xCoordinate, $yCoordinate)
+    {
+        if ($xCoordinate < 0 || $xCoordinate > $this->mapHeight - 1 || $yCoordinate < 0 || $yCoordinate > $this->mapWidth - 1 || $this->solvedMap[$xCoordinate][$yCoordinate] === 32000 || $this->obstacleMap[$xCoordinate][$yCoordinate] === 'x') {
+            return;
+        }
+
+        $this->obstacleMap[$xCoordinate][$yCoordinate] = 'x';
+
+        $currentValue = $this->solvedMap[$xCoordinate][$yCoordinate];
+        $newValue     = $currentValue + 1;
+
+        $this->visitNeighbour($xCoordinate + 1, $yCoordinate, $newValue);
+        $this->visitNeighbour($xCoordinate - 1, $yCoordinate, $newValue);
+        $this->visitNeighbour($xCoordinate, $yCoordinate + 1, $newValue);
+        $this->visitNeighbour($xCoordinate, $yCoordinate - 1, $newValue);
+
+        $this->visitNode($xCoordinate + 1, $yCoordinate);
+        $this->visitNode($xCoordinate - 1, $yCoordinate);
+        $this->visitNode($xCoordinate, $yCoordinate + 1);
+        $this->visitNode($xCoordinate, $yCoordinate - 1);
+    }
+
+    public function visitNeighbour($xCoordinate, $yCoordinate, $newValue)
+    {
+        if ($xCoordinate < 0 || $xCoordinate > $this->mapHeight - 1 || $yCoordinate < 0 || $yCoordinate > $this->mapWidth - 1) {
+            return;
+        }
+
+        $currentValue = $this->solvedMap[$xCoordinate][$yCoordinate];
+
+        if ((0 === $currentValue || $currentValue > $newValue) && $currentValue !== 32000) {
+            $this->solvedMap[$xCoordinate][$yCoordinate] = $newValue;
+        }
+    }
+
+    public function markStartNodeAsVisited($map, $startPoint)
+    {
+        $map[$startPoint->getXCoordinate()][$startPoint->getYCoordinate()] = 1;
+
+        return $map;
+    }
+
+    public function createInitialSolvedMap($map)
+    {
+        $solvedMap       = [];
+        $this->mapHeight = count($map);
+
+        foreach ($map as $mapLine => $mapLineContent) {
+            $solvedMap[$mapLine] = [];
+            $this->mapWidth      = count($mapLineContent);
+
+            foreach ($mapLineContent as $mapColumnKey => $mapColumn) {
+                if (0 !== $mapColumn) {
+                    $solvedMap[$mapLine][$mapColumnKey] = 32000;
+                } else {
+                    $solvedMap[$mapLine][$mapColumnKey] = 0;
+                }
+            }
+        }
+
+        return $solvedMap;
+    }
+
+    public function displayMap($map)
+    {
+        echo PHP_EOL;
+        foreach ($map as $mapLine) {
+            foreach ($mapLine as $mapColumn) {
+                echo $mapColumn . "\t";
+            }
+            echo PHP_EOL;
+        }
+        echo PHP_EOL;
+    }
+
+    /**
+     * @return array
+     */
+    public function getObstacleMap()
+    {
+        return $this->obstacleMap;
+    }
+
+    /**
+     * @param array $obstacleMap
+     *
+     * @return $this
+     */
+    public function setObstacleMap($obstacleMap)
+    {
+        $this->obstacleMap = $obstacleMap;
+
+        return $this;
+    }
+}
