@@ -5,6 +5,8 @@ namespace ApiBundle\Service;
 
 
 use ApiBundle\Entity\Maze;
+use ApiBundle\Entity\MazePoint;
+use ApiBundle\Entity\StartLocation;
 
 class MazeService extends AbstractEntityManagerService
 {
@@ -15,8 +17,33 @@ class MazeService extends AbstractEntityManagerService
      */
     public function generateNewMaze(Maze $maze)
     {
-        /* Save current maze metadata. */
-        $this->getManager()->persist($maze);
+        $startPoint = $maze->getStartLocation();
+        $endPoint   = $maze->getEndLocation();
+
+        for ($heightIterator = 0; $heightIterator < $maze->getHeight(); $heightIterator++) {
+            for ($widthIterator = 0; $widthIterator < $maze->getWidth(); $widthIterator++) {
+                $mazePointIsObstacle = false;
+
+                if (!($startPoint->getXCoordinate() === $heightIterator && $startPoint->getYCoordinate() === $widthIterator)
+                    && !($endPoint->getXCoordinate() === $heightIterator && $endPoint->getYCoordinate() === $widthIterator)
+                ) {
+                    $randomNumber        = rand(0, 100);
+                    $mazePointIsObstacle = $randomNumber > $maze->getBrickDensity();
+                }
+
+
+                $mazePoint = new MazePoint();
+
+                $mazePoint
+                    ->setMaze($maze)
+                    ->setObstacle($mazePointIsObstacle)
+                    ->setXCoordinate($heightIterator)
+                    ->setYCoordinate($widthIterator);
+
+                $this->getManager()->persist($maze);
+            }
+        }
+
         $this->getManager()->flush();
 
         return $maze;
@@ -27,7 +54,8 @@ class MazeService extends AbstractEntityManagerService
      *
      * @return array
      */
-    public function getMazeAsArray(Maze $maze) {
+    public function getMazeAsArray(Maze $maze)
+    {
         return [];
     }
 }

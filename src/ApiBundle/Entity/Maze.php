@@ -3,6 +3,7 @@
 
 namespace ApiBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,6 +18,18 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Maze extends AbstractTemporalEntity
 {
+    public function __construct()
+    {
+        $this->mazePoints = new ArrayCollection();
+    }
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ApiBundle\Entity\MazePoint", mappedBy="maze")
+     */
+    protected $mazePoints;
+
     /**
      * @var int
      *

@@ -29,12 +29,15 @@ class MazeController extends Controller
         $maze = new Maze();
         $maze = $this->processNewMazeMetadata($maze, $requestContent);
 
+        $maze = $this->processLocationMetadata($maze, $requestContent);
+
         $maze = $this->get('api.maze.service')->generateNewMaze($maze);
-        $this->processLocationMetadata($maze, $requestContent);
 
         $mazeAsArray = $this->get('api.maze.service')->getMazeAsArray($maze);
 
 //        $this->get('core.lee.service')->findRoute();
+
+        /* Display API response. */
     }
 
     protected function processLocationMetadata(Maze $maze, array $requestParameters)
@@ -75,6 +78,11 @@ class MazeController extends Controller
         $manager->persist($endPoint);
 
         $manager->flush();
+
+        $maze->setStartLocation($startPoint);
+        $maze->setEndLocation($endPoint);
+
+        return $maze;
     }
 
     /**
@@ -102,6 +110,10 @@ class MazeController extends Controller
         } else {
             $maze->setBrickDensity(50);
         }
+
+        $manager = $this->getDoctrine()->getManager();
+        $manager->persist($maze);
+        $manager->flush();
 
         return $maze;
     }
