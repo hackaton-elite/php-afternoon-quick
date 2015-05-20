@@ -50,8 +50,8 @@ class LeeService
         /* Create map copy */
         $this->solvedMap = $this->createInitialSolvedMap($this->obstacleMap);
         $this->solvedMap = $this->markStartNodeAsVisited($this->solvedMap, $startPoint);
-        $this->displayMap($this->obstacleMap);
-        $this->displayMap($this->solvedMap);
+//        $this->displayMap($this->obstacleMap);
+//        $this->displayMap($this->solvedMap);
 
         $this->visitNode($startPoint->getXCoordinate(), $startPoint->getYCoordinate());
 
@@ -59,13 +59,9 @@ class LeeService
 //        var_dump($this->mapHeight);
 //        die;
 
-        $this->displayMap($this->solvedMap);
+//        $this->displayMap($this->solvedMap);
 
-        var_dump($this->bestSolutionLength);
-
-        foreach ($this->bestSolutionRoute as $bestSolutionStep) {
-            echo $bestSolutionStep . ", ";
-        }
+        return $this->bestSolutionRoute;
     }
 
     public function visitNode($xCoordinate, $yCoordinate, $bestSolutionSoFar = [])
